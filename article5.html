@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Set Up GitHub Actions for Rust CI/CD – A Step‑by‑Step Guide for 2026 - Tech Hotspot Aggregation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="particle-network"></div>
+    <header class="glassmorphism">
+        <h1>Tech Hotspot Aggregation</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main style="width: 100%; max-width: 1600px; margin: 0 auto;">
+        <article class="card">
+            <div class="card-header">
+                <h1>How to Set Up GitHub Actions for Rust CI/CD – A Step‑by‑Step Guide for 2026</h1>
+            </div>
+            <div class="card-content">
+                <h2>Learn how to automate testing, building, and deployment of your Rust projects with GitHub Actions, ensuring code quality and streamlining your development workflow.</h2>
+                
+                <h3>Problem/Pain Point</h3>
+                <p>Rust developers often struggle with maintaining consistent code quality and reliable deployment processes. Manual testing and building are time-consuming, error-prone, and difficult to scale across team members. Common pain points include:</p>
+                <ul>
+                    <li>Forgetting to run tests before pushing code, leading to broken builds in main branches</li>
+                    <li>Inconsistent development environments causing "it works on my machine" issues</li>
+                    <li>Manual deployment processes that are slow and prone to human error</li>
+                    <li>Difficulty in enforcing code standards and catching bugs early in the development cycle</li>
+                    <li>Lack of visibility into build status and test results across the team</li>
+                </ul>
+                <p>These challenges slow down development velocity, increase technical debt, and make it harder to deliver reliable software consistently.</p>
+                
+                <h3>Solution and Steps</h3>
+                <p>Follow this step-by-step guide to set up a robust GitHub Actions workflow for your Rust project that automates testing, building, and deployment:</p>
+                
+                <h4>Step 1: Create the Basic Workflow Directory Structure</h4>
+                <p>First, set up the necessary directory for your GitHub Actions workflow:</p>
+                <pre><code>mkdir -p .github/workflows
+</code></pre>
+                
+                <h4>Step 2: Set Up Continuous Integration (CI) Workflow</h4>
+                <p>Create a workflow file that runs on every push and pull request to test your code:</p>
+                <pre><code># .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: [stable, beta, nightly]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: ${{ matrix.rust }}
+        override: true
+        components: rustfmt, clippy
+    
+    - name: Cache Cargo dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+    
+    - name: Check code formatting
+      run: cargo fmt -- --check
+    
+    - name: Run Clippy linter
+      run: cargo clippy -- -D warnings
+    
+    - name: Run tests
+      run: cargo test --verbose
+    
+    - name: Build project
+      run: cargo build --release
+</code></pre>
+                
+                <h4>Step 3: Add Automatic Dependency Updates</h4>
+                <p>Keep your dependencies up-to-date with Dependabot automation:</p>
+                <pre><code># .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+</code></pre>
+                
+                <h4>Step 4: Set Up Continuous Deployment (CD) to Cargo.io</h4>
+                <p>Automatically publish new versions when you create a GitHub release:</p>
+                <pre><code># .github/workflows/publish.yml
+name: Publish to crates.io
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+    
+    - name: Publish to crates.io
+      run: cargo publish --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
+</code></pre>
+                
+                <h4>Step 5: Add Code Coverage Reporting (Optional but Recommended)</h4>
+                <p>Integrate code coverage metrics to improve test quality:</p>
+                <pre><code># Add to your ci.yml under the test job, after "Run tests":
+    - name: Install cargo-tarpaulin
+      runs: cargo install cargo-tarpaulin
+    
+    - name: Run tests with coverage
+      run: cargo tarpaulin --out Xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: cobertura.xml
+        fail_ci_if_error: false
+</code></pre>
+                
+                <h3>Best Practices and Common Pitfalls</h3>
+                
+                <h4>Expert Tips for Success</h4>
+                <ul>
+                    <li><strong>Use Matrix Testing</strong>: Test against multiple Rust versions (stable, beta, nightly) to ensure compatibility and catch version-specific issues early.</li>
+                    <li><strong>Leverage Caching</strong>: Cache Cargo dependencies and build artifacts to significantly reduce workflow execution time and GitHub Actions minutes usage.</li>
+                    <li><strong>Implement Progressive Validation</strong>: Run fast checks (fmt, clippy) first, then tests, then build - this provides quick feedback for common issues before running longer processes.</li>
+                    <li><strong>Secure Your Secrets</strong>: Use GitHub Secrets for sensitive tokens like CARGO_REGISTRY_TOKEN, and never hardcode credentials in your workflow files.</li>
+                    <li><strong>Tag Your Releases</strong>: Use semantic versioning (v1.2.3) for your GitHub releases to trigger the publishing workflow automatically.</li>
+                </ul>
+                
+                <h4>Common Pitfalls to Avoid</h4>
+                <ul>
+                    <li><strong>Overlooking Cross-Platform Testing</strong>: Remember to add windows-latest and macos-latest to your runs-on matrix if your crate needs to work across platforms.</li>
+                    <li><strong>Ignoring Workflow Efficiency</strong>: Placing resource-intensive steps (like builds) before cached dependency restoration wastes time and minutes.</li>
+                    <li><strong>Neglecting Documentation Checks</strong>: Consider adding a step to check for broken links or missing documentation with tools like mdbook-linkcheck.</li>
+                    <li><strong>Forgetting to Handle PRs from Forks</strong>: By default, workflows don't run on PRs from forks for security reasons. If you need to test external contributions, adjust your trigger settings carefully.</li>
+                    <li><strong>Misjudging Cache Keys</strong>: Using overly broad cache keys can lead to cache pollution, while overly specific keys reduce cache hit rates. Include lock file hashes for optimal results.</li>
+                </ul>
+                
+                <h3>Expansion Resources</h3>
+                <ul>
+                    <li><a href="https://docs.github.com/en/actions">GitHub Actions Documentation</a> - Official guide to GitHub Actions</li>
+                    <li><a href="https://github.com/actions-rs/toolchain">Actions.rs Toolchain Action</a> - Rust-specific GitHub Actions</li>
+                    <li><a href="https://doc.rust-lang.org/cargo/reference/publishing.html">Cargo Publish Guide</a> - Official crates.io publishing instructions</li>
+                    <li><a href="https://docs.codecov.com/docs/github-actions">Codecov Integration Guide</a> - Setting up code coverage reporting</li>
+                    <li><a href="https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/about-dependabot-version-updates">Dependabot for Rust</a> - Automating dependency updates</li>
+                    <li><a href="https://github.com/rust-lang-nursery/rust-ci">Awesome Rust CI/CD</a> - Community-curated Rust CI resources</li>
+                </ul>
+                
+                <h3>Conclusion and Call to Action</h3>
+                <p>Setting up GitHub Actions for your Rust project transforms your development workflow from manual, error-prone processes to automated, reliable pipelines. By implementing CI/CD with proper testing, linting, and deployment automation, you'll catch bugs earlier, maintain consistent code quality, and deliver software faster with confidence.</p>
+                <p>Have you implemented GitHub Actions in your Rust projects? What workflow configurations have you found most effective? Share your experiences, tips, or questions in the comments below - whether you're just starting with Rust automation or optimizing advanced CI/CD pipelines, your insights can help fellow developers build better Rust software.</p>
+            </div>
+        </article>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
