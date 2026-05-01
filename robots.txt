@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: https://mango-svg122.github.io/sitemap.xml
