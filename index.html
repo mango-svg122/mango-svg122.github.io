@@ -64,58 +64,40 @@
             </div>
             <div class="card-content">
                 <ul id="article-list">
-                    <li class="glassmorphism">
-                        <a href="article1.html">
-                            <h3>OpenCode AI Coding Assistant: Features, Installation, Usage & Claude Code Comparison</h3>
-                            <p>Discover OpenCode, the open-source AI coding assistant rivaling Claude Code. Learn installation, features, usage tips, and real-world performance.</p>
-                        </a>
-                    </li>
-                    <li class="glassmorphism">
-                        <a href="article4.html">
-                            <h3>LLM Fine-Tuning Tutorial: Master Custom Model Training for Domain-Specific Applications in 2026</h3>
-                            <p>Learn how to efficiently fine-tune large language models for your specific use case without breaking the bank or requiring massive computational resources.</p>
-                        </a>
-                    </li>
-                    <li class="glassmorphism">
-                        <a href="article5.html">
-                            <h3>How to Set Up GitHub Actions for Rust CI/CD – A Step‑by‑Step Guide for 2026</h3>
-                            <p>Learn how to automate testing, building, and deployment of your Rust projects with GitHub Actions, ensuring code quality and streamlining your development workflow.</p>
-                        </a>
-                    </li>
-                    <li class="glassmorphism">
-                        <a href="article6.html">
-                            <h3>AWS Lambda Cost Optimization: Slash Your Serverless Bills by 70% with These Proven Techniques</h3>
-                            <p>Discover how to significantly reduce your AWS Lambda expenses without sacrificing performance or functionality through strategic optimization techniques.</p>
-                        </a>
-                    </li>
-                    <li class="glassmorphism">
-                        <a href="article7.html">
-                            <h3>Zero Trust Architecture Implementation: A Practical Guide for Modern Enterprises</h3>
-                            <p>Learn how to deploy a Zero Trust security model that assumes no implicit trust and verifies every request as if it originates from an open network.</p>
-                        </a>
-                    </li>
-                    <li class="glassmorphism">
-                        <a href="article8.html">
-                            <h3>Python pandas performance tips: Speed Up Your Data Analysis by 10x with These Proven Techniques</h3>
-                            <p>Learn how to optimize your pandas workflows for massive datasets, reduce memory usage, and accelerate data processing in Python with battle-tested techniques.</p>
-                        </a>
-                    </li>
-                    <li class="glassmorphism">
-                        <a href="article9.html">
-                            <h3>Async Communication Best Practices: Transform Your Remote Team's Collaboration in 2026</h3>
-                            <p>Master the art of asynchronous communication to boost productivity, reduce meeting overload, and create inclusive workflows for distributed teams across time zones.</p>
-                        </a>
-                    </li>
-                    <li class="glassmorphism">
-                        <a href="article10.html">
-                            <h3>How to Mint NFT on Polygon – A Beginner's Guide to Digital Collectibles in 2026</h3>
-                            <p>Learn step-by-step how to create, mint, and sell your own NFTs on the Polygon network with minimal gas fees and maximum accessibility.</p>
-                        </a>
-                    </li>
+                    <!-- Articles loaded dynamically from articles.json -->
                 </ul>
             </div>
         </section>
     </main>
+    <script>
+        // 只在桌面设备上加载粒子网络特效
+        if (window.innerWidth > 768) {
+            document.write('<div class="particle-network"></div>');
+        }
+    </script>
+    <script>
+        // Auto-load articles from JSON
+        fetch('articles.json')
+            .then(res => res.json())
+            .then(data => {
+                const list = document.getElementById('article-list');
+                data.articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+                data.articles.forEach(article => {
+                    const li = document.createElement('li');
+                    li.className = 'glassmorphism';
+                    li.innerHTML = `
+                        <a href="${article.id}.html">
+                            <h3>${article.title}</h3>
+                            <p>${article.description}</p>
+                        </a>
+                    `;
+                    list.appendChild(li);
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load articles:', err);
+            });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

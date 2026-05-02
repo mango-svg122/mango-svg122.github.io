@@ -1,0 +1,52 @@
+{
+  "articles": [
+    {
+      "id": "article1",
+      "title": "OpenCode AI Coding Assistant: Features, Installation, Usage & Claude Code Comparison",
+      "description": "Discover OpenCode, the open-source AI coding assistant rivaling Claude Code. Learn installation, features, usage tips, and real-world performance.",
+      "date": "2026-05-03"
+    },
+    {
+      "id": "article4",
+      "title": "LLM Fine-Tuning Tutorial: Master Custom Model Training for Domain-Specific Applications in 2026",
+      "description": "Learn how to efficiently fine-tune large language models for your specific use case without breaking the bank or requiring massive computational resources.",
+      "date": "2026-05-01"
+    },
+    {
+      "id": "article5",
+      "title": "How to Set Up GitHub Actions for Rust CI/CD – A Step‑by‑Step Guide for 2026",
+      "description": "Learn how to automate testing, building, and deployment of your Rust projects with GitHub Actions, ensuring code quality and streamlining your development workflow.",
+      "date": "2026-05-01"
+    },
+    {
+      "id": "article6",
+      "title": "AWS Lambda Cost Optimization: Slash Your Serverless Bills by 70% with These Proven Techniques",
+      "description": "Discover how to significantly reduce your AWS Lambda expenses without sacrificing performance or functionality through strategic optimization techniques.",
+      "date": "2026-05-01"
+    },
+    {
+      "id": "article7",
+      "title": "Zero Trust Architecture Implementation: A Practical Guide for Modern Enterprises",
+      "description": "Learn how to deploy a Zero Trust security model that assumes no implicit trust and verifies every request as if it originates from an open network.",
+      "date": "2026-05-01"
+    },
+    {
+      "id": "article8",
+      "title": "Python pandas performance tips: Speed Up Your Data Analysis by 10x with These Proven Techniques",
+      "description": "Learn how to optimize your pandas workflows for massive datasets, reduce memory usage, and accelerate data processing in Python with battle-tested techniques.",
+      "date": "2026-05-01"
+    },
+    {
+      "id": "article9",
+      "title": "Async Communication Best Practices: Transform Your Remote Team's Collaboration in 2026",
+      "description": "Master the art of asynchronous communication to boost productivity, reduce meeting overload, and create inclusive workflows for distributed teams across time zones.",
+      "date": "2026-05-01"
+    },
+    {
+      "id": "article10",
+      "title": "How to Mint NFT on Polygon – A Beginner's Guide to Digital Collectibles in 2026",
+      "description": "Learn step-by-step how to create, mint, and sell your own NFTs on the Polygon network with minimal gas fees and maximum accessibility.",
+      "date": "2026-05-01"
+    }
+  ]
+}
